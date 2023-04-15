@@ -1,0 +1,5 @@
+6.1
+- Q: What happens if users choose “Cancel”?
+- A: The program will return "You've chosen NO".
+- Q: How to customize the options to users?
+- A: The method "showOptionDialog" can be used instead of "showConfirmDialog", user can pass parameters into this method to customize the options as desired.
