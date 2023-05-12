@@ -1,3 +1,6 @@
+package hust.soict.dsai.aims.cart.Cart;
+import hust.soict.dsai.aims.disc.DigitalVideoDisc.DigitalVideoDisc;
+
 public class Cart {
 
 		public static final int MAX_NUMBERS_ORDERED = 20;
@@ -67,6 +70,7 @@ public class Cart {
 	        for (int i = 0; i < qtyOrdered; i++) {
 	            DigitalVideoDisc dvd = itemsOrdered[i];
 	            int id = dvd.getID();
+	            totalCost += dvd.getCost();
 	            System.out.println(id + ". " + dvd.toString());
 	        }
 	        System.out.printf("Total cost: %.2f\n", totalCost);
