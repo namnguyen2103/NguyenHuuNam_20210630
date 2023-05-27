@@ -24,29 +24,25 @@ public class Disc extends Media {
 	public Disc() {
 		// TODO Auto-generated constructor stub
 	}
-	public Disc(int id, String title) {
+	public Disc(String title) {
 		super();
-		setId(id);
 		setTitle(title);		
 	}
-	public Disc(int id, String title, String category, float cost) {
+	public Disc(String title, String category, float cost) {
 		super();
-		setId(id);
 		setTitle(title);
 		setCategory(category);
 		setCost(cost);
 	}
-	public Disc(int id, String title, String category, String director, float cost) {
+	public Disc(String title, String category, String director, float cost) {
 		super();
-		setId(id);
 		setTitle(title);
 		setCategory(category);
 		this.director = director;
 		setCost(cost);
 	}
-	public Disc(int id, String title, String category, String director, int length, float cost) {
+	public Disc(String title, String category, String director, int length, float cost) {
 		super();
-		setId(id);
 		setTitle(title);
 		setCategory(category);
 		this.director = director;

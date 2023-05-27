@@ -5,20 +5,24 @@ public class DigitalVideoDisc extends Disc {
 	private static int nbDigitalVideoDiscs = 0;
 		
 	public DigitalVideoDisc(String title) {
-		super(nbDigitalVideoDiscs + 1, title);
+		super(title);
 		nbDigitalVideoDiscs ++;
+		setId(nbDigitalVideoDiscs);
 	}
 	public DigitalVideoDisc(String title, String category, float cost) {
-		super(nbDigitalVideoDiscs + 1, title, category, cost);
+		super(title, category, cost);
 		nbDigitalVideoDiscs ++;
+		setId(nbDigitalVideoDiscs);
 	}
 	public DigitalVideoDisc(String title, String category, String director, float cost) {
-		super(nbDigitalVideoDiscs + 1, title, category, director, cost);
+		super(title, category, director, cost);
 		nbDigitalVideoDiscs ++;
+		setId(nbDigitalVideoDiscs);
 	}
 	public DigitalVideoDisc(String title, String category, String director, int length, float cost) {
-		super(nbDigitalVideoDiscs + 1, title, category, director, length, cost);
+		super(title, category, director, length, cost);
 		nbDigitalVideoDiscs ++;
+		setId(nbDigitalVideoDiscs);
 	}
 	
 	

@@ -1,7 +1,6 @@
 package hust.soict.dsai.aims.store;
 import hust.soict.dsai.aims.media.DigitalVideoDisc;
 
-// 7. Implement the Store class
 public class Store {
     private DigitalVideoDisc[] itemsInStore;
     private static int currentIndex = 0;      

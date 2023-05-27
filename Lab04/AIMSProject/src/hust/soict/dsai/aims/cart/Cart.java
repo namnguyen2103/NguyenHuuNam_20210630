@@ -18,7 +18,7 @@ public class Cart {
 	        }
 	    }
 	    
-		// 2. Method Overloading
+		// Method Overloading
 		public void addDigitalVideoDisc(DigitalVideoDisc[] dvdList) {
 		    int spaceLeft = MAX_NUMBERS_ORDERED - qtyOrdered;
 		    if (dvdList.length > spaceLeft) {
