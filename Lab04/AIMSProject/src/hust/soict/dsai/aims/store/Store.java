@@ -1,42 +1,59 @@
 package hust.soict.dsai.aims.store;
-import hust.soict.dsai.aims.media.DigitalVideoDisc;
+import hust.soict.dsai.aims.media.Media;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Store {
-    private DigitalVideoDisc[] itemsInStore;
-    private static int currentIndex = 0;      
-    
-    public Store(int storeSize) {
-		super();
-		this.itemsInStore = new DigitalVideoDisc[storeSize];
+    private ArrayList<Media> itemsInStore;
+    private int maxSize;
+
+    public ArrayList<Media> getItemsInStore() {
+		return itemsInStore;
 	}
 
-	public void addDVD(DigitalVideoDisc disc) {
-		if (currentIndex < itemsInStore.length) {
-            itemsInStore[currentIndex] = disc;
-            currentIndex++;
-            System.out.println("DVD added to the store.");
-        } else {
+	public Store() {
+        itemsInStore = new ArrayList<>();
+        maxSize = Integer.MAX_VALUE;  // Default: no size limit
+    }
+
+    public Store(int maxSize) {
+        itemsInStore = new ArrayList<>();
+        this.maxSize = maxSize;
+    }
+
+    public void addMedia(Media media) {
+        if (itemsInStore.size() >= maxSize) {
             System.out.println("The store is full.");
+        } else {
+        	if (!itemsInStore.contains(media)) {
+                itemsInStore.add(media);
+                System.out.println("Media added to the store.");
+            } else {
+                System.out.println("Media is already in the store.");
+            }
         }
     }
 
-    public void removeDVD(int id) {
-        boolean found = false;
-        for (int i = 0; i < currentIndex; i++) {
-            if (itemsInStore[i].getId() == id) {
-                // shift items to fill the gap
-                for (int j = i; j < currentIndex - 1; j++) {
-                    itemsInStore[j] = itemsInStore[j + 1];
-                }
-                itemsInStore[currentIndex - 1] = null;
-                currentIndex--;
-                found = true;
-                System.out.println("DVD removed from the store.");
-                break;
+    public void removeMedia(Media media) {
+        if (itemsInStore.remove(media)) {
+            System.out.println("Media removed from the store.");
+        } else {
+            System.out.println("Media not found in the store.");
+        }
+    } 
+    
+    public void printItemsInStore() {
+        System.out.println("************************* ITEMS IN THE STORE *************************");
+        if (itemsInStore.isEmpty()) {
+            System.out.println("The store is empty.");
+        } else {
+        	for (Media media : itemsInStore) {
+                System.out.println(media.toString());
+                System.out.println("---------------------------------------------------------------------");
             }
         }
-        if (!found) {
-            System.out.println("DVD with ID " + id + " not found in the store.");
-        }
+        System.out.println("**********************************************************************");
     }
+    
+    
 }
