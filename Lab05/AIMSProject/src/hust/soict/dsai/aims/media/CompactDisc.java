@@ -1,90 +1,152 @@
 package hust.soict.dsai.aims.media;
-import java.util.ArrayList;
 
-public class CompactDisc extends Disc implements Playable {
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+
+import hust.soict.dsai.aims.exception.PlayerException;
+import hust.soict.dsai.aims.screen.ExceptionDialog;
+
+public class CompactDisc extends Disc implements Playable{
 	
 	private String artist;
-    private ArrayList<Track> tracks;     
-    
-    public CompactDisc(String title, String artist) {
-		super(title);
-		this.artist = artist;
-		this.tracks = new ArrayList<>();
-	}
-    
-    public CompactDisc(String title, String artist, ArrayList tracks) {
-		super(title);
-		this.artist = artist;
-		this.tracks = tracks;
-	}
-    
-    public CompactDisc(String title, String category, float cost, String artist, ArrayList tracks) {
-		super(title, category, cost);
-		this.artist = artist;
-		this.tracks = tracks;
-	}
-
-	public CompactDisc(String title, String category, String director, float cost, String artist, ArrayList tracks) {
+	private List<Track> tracks = new ArrayList<Track>();
+	
+	public CompactDisc(String title, String category, String director, float cost, String artist) {
 		super(title, category, director, cost);
 		this.artist = artist;
-		this.tracks = tracks;
-	}
-	public CompactDisc(int id, String title, String category, String director, float cost, String artist) {
-		super(id, title, category, director, cost);
-		this.artist = artist;
+    	Date dateAdded = new Date();
+    	this.dateAdded = dateAdded;
 	}
 	
-	public void addTrack(Track track) {
-        if (tracks.contains(track)) {
-            System.out.println("The track is already in the list of tracks.");
-        } else {
-            tracks.add(track);
-            System.out.println("The track has been added successfully.");
-        }
-    }
+	public CompactDisc(String title, String category, String director, int length, float cost, String artist, List<Track> tracks) {
+		super(title, category, director, length, cost);
+		this.artist = artist;
+		this.tracks = tracks;
+    	Date dateAdded = new Date();
+    	this.dateAdded = dateAdded;
+	} 
+	
+	public void addTrack(Track track) throws IllegalArgumentException{
+		try {
+			if (tracks.contains(track)) {
+				throw new IllegalArgumentException("ERROR: The track has already been added");
+			}
+			else {
+				tracks.add(track);
+				System.out.println("Track added successfully");
+			}
+		}
+		catch (IllegalArgumentException e) {
+			System.out.println("The track has not been added");
+		}
 
-    public void removeTrack(Track track) {
-        if (tracks.contains(track)) {
-            tracks.remove(track);
-            System.out.println("The track has been removed successfully.");
-        } else {
-            System.out.println("The track does not exist in the list of tracks.");
-        }
-    }
-    
-    public int getLength() {
-        int totalLength = 0;
-        for (Track track : tracks) {
-            totalLength += track.getLength();
-        }
-        return totalLength;
-    }
-    
-    public void play() {
-        System.out.println("Playing Compact Disc: " + getTitle());
-        System.out.println("Artist: " + artist);
-        System.out.println("Total Length: " + getLength() + " seconds");
-        System.out.println("Tracks:");
-        for (Track track : tracks) {
-            track.play();
-        }
-    }
-    
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Compact Disc - ").append(this.getTitle()).append("\n");
-        sb.append("Category: ").append(this.getCategory()).append("\n");        
-        sb.append("Artist: ").append(this.artist).append("\n");
-        sb.append("Director: ").append(this.getDirector()).append("\n");
-        sb.append("Cost: ").append(this.getCost()).append("\n");
-        sb.append("Tracks: ").append(tracks.size()).append("\n");
-        for (Track track : this.tracks) {
-            sb.append(" - ").append(track.getTitle()).append("\n");
-        }
-        sb.append("Total Length: ").append(getLength()).append(" minutes");
+	}
+	public void removeTrack(Track track) throws IllegalArgumentException{
+		try {
+			if (!(tracks.contains(track))) {
+				throw new IllegalArgumentException("ERROR: The track has not been added");
+			}
+			else {
+				tracks.remove(track);
+				System.out.println("Track removed successfully");
+			}
+		}
+		catch (IllegalArgumentException e) {
+			System.out.println("The track has not been added");
+		}
+	}
+	public int getLength() {
+		int Length = 0;
+		for (int i = 0; i < tracks.size(); i++) {
+			Length += tracks.get(i).getLength();
+		}
+		return Length;
+	}
+	public ArrayList<String> playToString() {
+		ArrayList<String> output = new ArrayList<String>();
+		
+		output.add("Playing CD: " + this.getTitle());
+		output.add("Number of tracks: " + Integer.toString(this.tracks.size()));
+		return output;
+	}
+	
+	public void play() throws PlayerException {
+		try {
+			if (this.getLength() > 0) {
+				JDialog playDialog = new JDialog(new JFrame(), "Media Player");
+				
+				String playLabelText = "<html>";
+				for(String label: playToString()) {
+					playLabelText += label;
+					playLabelText += "<br>";
+				}
+				playLabelText += "<html>";
+				
+				JLabel playLabel = new JLabel(playLabelText, SwingConstants.CENTER);
+				playDialog.add(playLabel);
+				playDialog.setLocation(200,200);
+				playDialog.pack();
+				playDialog.setVisible(true);
+				
+				int count = 0;
+				Iterator<Track> iter = tracks.iterator();
+				Track nextTrack; 
+				JDialog playDialogTrack = new JDialog(new JFrame(), "Media Player");;
+				String playLabelTextTrack = "<html>Track " + Integer.toString(count) + ": playing...<html>";;
+				JLabel playLabelTrack = new JLabel(playLabelTextTrack, SwingConstants.CENTER);;
+				while(iter.hasNext()) {
+					nextTrack = (Track) iter.next();
+					playDialog.remove(playLabelTrack);
+					playDialogTrack.dispose();
+					try {
+						nextTrack.play();
+						count += 1;
+						
+						playDialogTrack = new JDialog(new JFrame(), "Media Player");
+						
+						playLabelTextTrack = "<html>Track " + Integer.toString(count) + ": playing...<html>";
+						
+						playLabelTrack = new JLabel(playLabelTextTrack, SwingConstants.CENTER);
+						playDialog.add(playLabelTrack);
+						playDialog.setLocation(200,200);
+						playDialog.pack();
+						playDialog.setVisible(true);
+					}
+					catch (PlayerException e) {
+						Exception ee = e;
+						ExceptionDialog ed = new ExceptionDialog(ee);
+						ed.getDialog();
+					}
+				}
+			}
+			else {
+				throw new PlayerException("ERROR: CD length is non-positive!");
+			}
+		}
+		catch (PlayerException e) {
+			Exception ee = e;
+			ExceptionDialog ed = new ExceptionDialog(ee);
+			ed.getDialog();
+		}
+	}
 
-        return sb.toString();
-    }
-
+	public String toString() {
+		List<String> trackList = new ArrayList<String>();
+		for (Track track : tracks) {
+			trackList.add(track.getTitle() + ": " + track.getLength());
+		}
+		Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return "CD: " + title + "\n" 
+				+ "Category: " + this.category + "\n" 
+				+ "Cost: " + Float.toString(this.cost) + " $\n"
+				+ "Date Added: " + formatter.format(dateAdded) + "\n"
+				+ "Artist(s): " + artist + "\n"
+				+ "Track(s) (Title: Length): " + String.join(", ", trackList) + "\n";
+	}
 }

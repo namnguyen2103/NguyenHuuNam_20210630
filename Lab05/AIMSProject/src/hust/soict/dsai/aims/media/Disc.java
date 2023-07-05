@@ -1,69 +1,37 @@
 package hust.soict.dsai.aims.media;
 
-public class Disc extends Media {
+public class Disc extends Media{
 	
-	private String director;
-	private int length;		
+	protected int length;
+	protected String director;
 	
-	public String getDirector() {
-		return director;
-	}
-
-	public void setDirector(String director) {
-		this.director = director;
-	}
-
 	public int getLength() {
 		return length;
 	}
-
-	public void setLength(int length) {
-		this.length = length;
+	public String getDirector() {
+		return director;
 	}
-		
 	public Disc() {
 		// TODO Auto-generated constructor stub
 	}
 	public Disc(String title) {
-		super();
-		setTitle(title);		
+		super(title);
 	}
 	public Disc(String title, String category, float cost) {
-		super();
-		setTitle(title);
-		setCategory(category);
-		setCost(cost);
+		super(title, category, cost);
 	}
 	public Disc(String title, String category, String director, float cost) {
-		super();
-		setTitle(title);
-		setCategory(category);
+		super(title, category, cost);
 		this.director = director;
-		setCost(cost);
 	}
-	public Disc(int id, String title, String category, String director, float cost) {
-		super();
-		setId(id);
-		setTitle(title);
-		setCategory(category);
+	public Disc(String title, String category, String director, int length, float cost) throws IllegalArgumentException {
+		super(title, category, cost);
 		this.director = director;
-		setCost(cost);
-	}
-	public Disc(String title, String category, String director, int length, float cost) {
-		super();
-		setTitle(title);
-		setCategory(category);
-		this.director = director;
-		this.length = length;
-		setCost(cost);
-	}
-	public Disc(int id, String title, String category, String director, int length, float cost) {
-		super();
-		setId(id);
-		setTitle(title);
-		setCategory(category);
-		this.director = director;
-		this.length = length;
-		setCost(cost);
+		if (length <= 0) {
+			throw new IllegalArgumentException("Disc length must be positive");
+		}
+		else {
+			this.length = length;
+		}
 	}
 }

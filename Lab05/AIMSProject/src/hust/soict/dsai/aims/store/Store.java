@@ -1,59 +1,56 @@
 package hust.soict.dsai.aims.store;
-import hust.soict.dsai.aims.media.Media;
-import java.util.ArrayList;
-import java.util.Collections;
+
+import java.util.*;
+
+import java.beans.*;
+
+import hust.soict.dsai.aims.media.*;
 
 public class Store {
-    private ArrayList<Media> itemsInStore;
-    private int maxSize;
+	private ArrayList<Media> itemsInStore = new ArrayList<Media>();
+	private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+	
+	public String addMedia(Media media) {
+		if (itemsInStore.contains(media)) {
+			return "The media has already been added";
+		}
+		else {
+			ArrayList<Media> oldItemsInStore = new ArrayList<Media>(itemsInStore); 
+			itemsInStore.add(media);
+			pcs.firePropertyChange("itemsInStore", oldItemsInStore, itemsInStore);
+			return "Media added successfully";
+		}
+	}
+	public String removeMedia(Media media) {
+		if (!(itemsInStore.contains(media))) {
+			return "The media has not been added";
+		}
+		else {
+			ArrayList<Media> oldItemsInStore = new ArrayList<Media>(itemsInStore); 
+			itemsInStore.remove(media);
+			pcs.firePropertyChange("itemsInStore", oldItemsInStore, itemsInStore);
 
-    public ArrayList<Media> getItemsInStore() {
+			return "Media removed successfully";
+		}
+	}
+	public void displayItemsInStore() {
+		int i = 0;
+		System.out.println("Item(s) in store: \n");
+		for (Media media : itemsInStore) {
+			i++;
+			System.out.println(Integer.toString(i) + ". \n" + media);
+		}
+	}
+	public ArrayList<Media> getItemsInStore() {
 		return itemsInStore;
 	}
-
-	public Store() {
-        itemsInStore = new ArrayList<>();
-        maxSize = Integer.MAX_VALUE;  // Default: no size limit
+	
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(listener);
     }
-
-    public Store(int maxSize) {
-        itemsInStore = new ArrayList<>();
-        this.maxSize = maxSize;
+	
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        pcs.removePropertyChangeListener(listener);
     }
-
-    public void addMedia(Media media) {
-        if (itemsInStore.size() >= maxSize) {
-            System.out.println("The store is full.");
-        } else {
-        	if (!itemsInStore.contains(media)) {
-                itemsInStore.add(media);
-                System.out.println("Media added to the store.");
-            } else {
-                System.out.println("Media is already in the store.");
-            }
-        }
-    }
-
-    public void removeMedia(Media media) {
-        if (itemsInStore.remove(media)) {
-            System.out.println("Media removed from the store.");
-        } else {
-            System.out.println("Media not found in the store.");
-        }
-    } 
-    
-    public void printItemsInStore() {
-        System.out.println("************************* ITEMS IN THE STORE *************************");
-        if (itemsInStore.isEmpty()) {
-            System.out.println("The store is empty.");
-        } else {
-        	for (Media media : itemsInStore) {
-                System.out.println(media.toString());
-                System.out.println("---------------------------------------------------------------------");
-            }
-        }
-        System.out.println("**********************************************************************");
-    }
-    
-    
 }
+

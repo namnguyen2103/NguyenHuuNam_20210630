@@ -1,37 +1,65 @@
 package hust.soict.dsai.aims.media;
 
-public class Track implements Playable {
-    private String title;
-    private int length;
+import hust.soict.dsai.aims.exception.PlayerException;
+import hust.soict.dsai.aims.screen.ExceptionDialog;
 
-    public Track(String title, int length) {
-        this.title = title;
-        this.length = length;
-    }
+public class Track {
 
-    public String getTitle() {
-        return title;
-    }
+	private String title;
+	private int length;
+	
+	public String getTitle() {
+		return title;
+	}
 
-    public int getLength() {
-        return length;
-    }
-    
-    public void play() {
-    	System.out.println("Playing track: " + this.getTitle());
-    	System.out.println("Track length: " + this.getLength());
-    }
+	public int getLength() {
+		return length;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        Track other = (Track) obj;
-        return this.title.equals(other.title) && this.length == other.length;
-    }    
+	public Track() {
+		super();
+	}
+	
+	public Track(String title) {
+		super();
+		this.title = title;
+	}
+	
+	public Track(String title, int length) throws IllegalArgumentException  {
+		super();
+		this.title = title;
+		if (length <= 0) {
+			throw new IllegalArgumentException("Disc length must be positive");
+		}
+		else {
+			this.length = length;
+		}
+	}
+	public void play() throws PlayerException {
+		try {
+			if (this.getLength() <= 0) {
+				System.out.println("Playing Track: " + this.getTitle());
+				System.out.println("Track length: " + this.getLength());
+			}
+			else {
+				System.err.println();
+				throw new PlayerException("ERROR: Track length is non-posiive!");
+			}
+		}
+		catch (PlayerException e) {
+			Exception ee = e;
+			ExceptionDialog ed = new ExceptionDialog(ee);
+			ed.getDialog();
+		}
+	}
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
+		Track track = (Track) obj;
+		return title.equals(track.title) && (length == track.length);
+	}
 }
-
